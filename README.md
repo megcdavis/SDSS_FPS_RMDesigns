@@ -3,13 +3,13 @@ Authors: Jon Trump and Meg Davis (megan.c.davis@uconn.edu)
 
 Software installation instructions: https://docs.google.com/document/d/1zqhkIVhKqiP1eNojgBWrZDLOZgOEv3t92F1laEY2ofw/edit
 
-As of 03/04/2022, you will need the following versions of the SDSS FPS python packages:
--  Mugatu 1.1.1
+As of 10/03/2022, you will need the following versions of the SDSS FPS python packages:
+-  Mugatu 1.3.2
 -  Roboscheduler 0.11.1
 -  Kaiju 1.2.2
--  Coordio 1.2.1
--  Robostrategy 1.2.0 (USE MAIN FOR NOW)
--  fps_calibrations *CHECK UTAH*
+-  Coordio 1.4.2
+-  Robostrategy 1.4.4
+-  fps_calibrations APO.2022.08.31
 
 General script running instructions:
 1. ssh to utah (Meg: run ./utah.sh in FPS folder OR run ssh -l USERNAME -L 7500:operations.sdss.org:5432 eboss.sdss.org cat - )
@@ -18,7 +18,7 @@ General script running instructions:
 4. command-T in terminal for a new window
 5. either run the shell script you made or run: time python create_design_max.py
 6. ignore warnings for now
-7. you'll need to hack the file afterwards, go use the hack_the_fitfiles.ipynb to do so (need to edit the header and change the arrays in hdu 2 to match those of a 174x8 cadence)
+7. you'll need to hack the file afterwards, go use the hack_the_fitfiles.ipynb to do so (need to edit the header and change the arrays in hdu 2 to match those of a 174x8 OR 100x8 cadence)
 8. validate locally using the local_validate.ipynb
 9. rename and prepare to upload to utah
 
