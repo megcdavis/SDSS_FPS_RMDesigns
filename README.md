@@ -18,7 +18,7 @@ General script running instructions:
 4. command-T in terminal for a new window
 5. either run the shell script you made or run: time python create_design_max.py
 6. ignore warnings for now
-7. you'll need to hack the file afterwards, go use the hack_the_fitfiles.ipynb to do so (need to edit the header and change the arrays in hdu 2 to match those of a 174x8 OR 100x8 cadence)
+7. you'll need to hack the file afterwards, go use the hack_the_fitfiles.ipynb to do so (need to edit the header and change the arrays in hdu 2 to match those of a 174x8 OR 100x8 cadence), contact meg for the examples needed (they are too big to put here).
 8. validate locally using the local_validate.ipynb
 9. rename and prepare to upload to utah
 
