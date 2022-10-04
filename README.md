@@ -9,7 +9,7 @@ As of 10/03/2022, you will need the following versions of the SDSS FPS python pa
 -  Kaiju 1.2.2
 -  Coordio 1.4.2
 -  Robostrategy 1.4.4
--  fps_calibrations APO.2022.08.31
+-  fps_calibrations 2022.08.31
 
 General script running instructions:
 1. ssh to utah (Meg: run ./utah.sh in FPS folder OR run ssh -l USERNAME -L 7500:operations.sdss.org:5432 eboss.sdss.org cat - )
