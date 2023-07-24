@@ -11,6 +11,7 @@ __year__ = "2021-2022"
 
 import sys
 sys.path.append("/Users/meg/OneDrive - University of Connecticut/Meg_PhDresearch/scripts_notebooks/FPS/fps_calibrations")
+sys.path.append("/Users/meg/OneDrive - University of Connecticut/Meg_PhDresearch/scripts_notebooks/FPS/roboscheduler/python")
 sys.path.append("/Users/meg/OneDrive - University of Connecticut/Meg_PhDresearch/scripts_notebooks/FPS/robostrategy/python")
 from peewee import *
 import numpy as np
@@ -20,6 +21,8 @@ from coordio.utils import radec2wokxy
 import robostrategy.obstime as obstime
 import coordio.time
 from astropy.table import Table
+
+
 
 print("CONNECTING TO UTAH (cadences)")
 ## server stuff for cadences
@@ -37,12 +40,6 @@ field_designing = "RM"
 data_file = r"BHM_cartons_RM_survey_v0.5.fits"
 savename = r"BHM_RM_test.fits"
 
-observatory = 'APO'
-if observatory == 'APO':
-    r_search = 1.49
-else:
-    r_search = 0.95
-
 # specify the field center and position angle
 #from: https://wiki.sdss.org/display/BHM/Reverberation+Mapping
 #XMM LSS
@@ -52,6 +49,7 @@ position_angle=25.5
 obsTime = 2459458.5
 skies = 50
 standards = 70
+observatory = 'APO'
 cartons_used = ['bhm_rm_known_spec', 'bhm_rm_ancillary', 'bhm_rm_core','bhm_rm_var', 'ops_sky_boss', 'ops_std_eboss']
 
 #IF CANDENCE NEEDS TO BE RESET, MUST RESET AFTER WHERE CADENCES ARE CALLED!!!
@@ -67,10 +65,16 @@ try:
     position_angle = float(sys.argv[2])
     racen = float(sys.argv[3])
     deccen = float(sys.argv[4])
-    savename = sys.argv[5]
+    observatory = str(sys.argv[5])
+    savename = sys.argv[6]
     print("using file: {}".format(data_file))
 except: #IndexError, but might as well catch 'em all!
     print("Using default filename: {}".format(data_file))
+    
+if observatory == 'APO':
+    r_search = 1.49
+else:
+    r_search = 0.95
     
 print("observatory: {}".format(observatory))
 print("field creating designs for: {}".format(field_designing))
@@ -95,14 +99,17 @@ value = np.array(data["value"])
 carton = np.array(data["carton"], dtype=str)
 instrument = np.array(data["instrument"], dtype='<U10')
 carton_to_target_pk = np.array(data["carton_to_target_pk"])
-magnitudes = np.zeros((len(data["g"]),7))
+magnitudes = np.zeros((len(data["g"]),10))
 magnitudes[:, 0] = data["g"]
 magnitudes[:, 1] = data["r"]
 magnitudes[:, 2] = data["i"]
-magnitudes[:, 3] = data["bp"]
-magnitudes[:, 4] = data["gaia_g"]
-magnitudes[:, 5] = data["rp"]
-magnitudes[:, 6] = data["h"]
+magnitudes[:, 3] = data["z"]
+magnitudes[:, 4] = data["bp"]
+magnitudes[:, 5] = data["gaia_g"]
+magnitudes[:, 6] = data["rp"]
+magnitudes[:, 7] = data["j"]
+magnitudes[:, 8] = data["h"]
+magnitudes[:, 9] = data["k"]
 program = np.array(data['program'])
 category = np.array(data['category'])
 tag = np.array(data['tag'])
@@ -127,13 +134,16 @@ x, y, fieldWarn, HA, PA_coordio = radec2wokxy(ra=ra,
                                               obsTime=obsTime)
 # need to load cadences before building designs
 print("CADENCE.")
-cadence.CadenceList().fromdb(version='v1')
+clist = cadence.CadenceList()
+clist.fromdb(version='v1')
+clist.cadences['dark_1x1'].obsmode_pk = ['dark_rm']
 
-field_cadence = cadence_used
 # create the field object
 f = field.Field(racen=racen, deccen=deccen, pa=position_angle,
-                field_cadence=field_cadence, observatory=observatory.lower(),
+                field_cadence=cadence_used, observatory=observatory.lower(),
                 verbose=True)
+
+#f.design_mode = np.array(['dark_rm'])
 
 # set the required skies, in this case all fibers
 #zero ap stars and standards
@@ -162,7 +172,7 @@ targets_dtype = np.dtype([('ra', np.float64),
                           ('lambda_eff', np.float32),
                           ('delta_ra', np.float64),
                           ('delta_dec', np.float64),
-                          ('magnitude', np.float32, 7),
+                          ('magnitude', np.float32, 10),
                           ('x', np.float64),
                           ('y', np.float64),
                           ('within', np.int32),
@@ -179,8 +189,8 @@ targets_dtype = np.dtype([('ra', np.float64),
                           ('rsid', np.int64),
                           ('target_pk', np.int64),
                           ('rsassign', np.int32),
-                          ('tag', np.unicode, 10),
-                          ('plan',np.unicode,10)])
+                          ('tag', np.unicode_, 10),
+                          ('plan',np.unicode_,10)])
 
 
 # create an empty array
