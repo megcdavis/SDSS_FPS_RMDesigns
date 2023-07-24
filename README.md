@@ -24,13 +24,13 @@ General script running instructions:
 
 
 Uploading designs to Utah:
-1. ssh USERNAME@manga.sdss.org
+1. ssh USERNAME@eboss.sdss.org
 2. cd to the directory Ilija told you to use
-3. in local terminal (not ssh'ed into utah): scp /directory/to/designs/* USERNAME@manga.sdss.org:/directory/where/you/want/them/
+3. in local terminal (not ssh'ed into utah): scp /directory/to/designs/* USERNAME@eboss.sdss.org:/directory/where/you/want/them/
 4. enter password
 5. go to the place on utah where you put the designs
 6. chmod 670 the files to make them grabbable for everyone else
-7. ping Ilija
+7. ping Ilija and John D.
 
 
 
