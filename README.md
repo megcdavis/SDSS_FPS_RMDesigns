@@ -1,19 +1,14 @@
 This repository contains the scripts and analysis notebooks for the BHM-RM FPS designs for SDSS-V. 
 Authors: Jon Trump and Meg Davis (megan.c.davis@uconn.edu)
 
-Software installation instructions: https://docs.google.com/document/d/1zqhkIVhKqiP1eNojgBWrZDLOZgOEv3t92F1laEY2ofw/edit
+Software installation instructions and latest software versions: https://docs.google.com/document/d/1zqhkIVhKqiP1eNojgBWrZDLOZgOEv3t92F1laEY2ofw/edit
 
-As of 10/03/2022, you will need the following versions of the SDSS FPS python packages:
--  Mugatu 1.3.2
--  Roboscheduler 0.11.1
--  Kaiju 1.2.2
--  Coordio 1.4.2
--  Robostrategy 1.4.4
--  fps_calibrations 2022.08.31
+
 
 General script running instructions:
 1. ssh to utah (Meg: run ./utah.sh in FPS folder OR run ssh -l USERNAME -L 7500:operations.sdss.org:5432 eboss.sdss.org cat - )
-2. edit fps script for defaults, or set up shell script with field carton file, RA, DEC, PA, file save name
+2. edit fps script (create_design_max.py) for defaults, or set up shell script with field carton file, RA, DEC, PA, Observatory file save name
+  - EXAMPLE LINE: python create_design_max.py BHM_cartons_RM_v1_newpriorities.fits 25.5 213.7041666 53.075 APO RM_newsurvey3.fits
 3. USE 1x1 CADENCES FOR NOW
 4. command-T in terminal for a new window
 5. either run the shell script you made or run: time python create_design_max.py
@@ -26,7 +21,7 @@ General script running instructions:
 Uploading designs to Utah:
 1. ssh USERNAME@eboss.sdss.org
 2. cd to the directory Ilija told you to use
-3. in local terminal (not ssh'ed into utah): scp /directory/to/designs/* USERNAME@eboss.sdss.org:/directory/where/you/want/them/
+3. in local terminal (not ssh'ed into utah): scp /directory/to/designs/*.fits USERNAME@eboss.sdss.org:/directory/where/you/want/them/
 4. enter password
 5. go to the place on utah where you put the designs
 6. chmod 670 the files to make them grabbable for everyone else
